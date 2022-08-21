@@ -39,6 +39,7 @@ class Graph(object):
         """
         Initialize an adjacency list representation of graph using
         list of edges.
+
         """
         for u, v in self.edges:
             self.add_edge(u, v)

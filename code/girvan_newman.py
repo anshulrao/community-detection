@@ -24,12 +24,14 @@ class GirvanNewman(object):
         Computes edge-betweenness centrality (ebc) scores for all the edges
         in graph.
 
+        Time Complexity: O(V^2 + EV)
+
         """
         edge_betweenness = dict.fromkeys([tuple(e) for e in self.g.edges], 0)
 
         def bfs(root):
             """
-            BFS (Breadth-First Traversal) starting from root node.
+            BFS (Breadth-First Search) starting from root node.
 
             :param root: the starting node for BFS traversal.
             :return: shortest paths dictionary that stores the number of
@@ -41,6 +43,7 @@ class GirvanNewman(object):
 
             Time Complexity: O(V + E)
             Space Complexity: O(V)
+
             """
             shortest_paths = dict.fromkeys(self.g.nodes, 1)
             reverse_edges = {}
@@ -81,7 +84,7 @@ class GirvanNewman(object):
 
         # consider each root as the root
         for root in self.g.nodes:
-            paths, levels, edges = bfs(root)
+            paths_count, levels, edges = bfs(root)
             # sort the levels in the reverse order because we intend
             # to traverse in reverse.
             levels = {k: v for k, v in sorted(levels.items(),
@@ -102,11 +105,15 @@ class GirvanNewman(object):
                         # for example, if capacity of node u is 1 and number of
                         # shortest paths crossing u is 3, then we will divide
                         # 1/3 = 0.33. let's say we have two backward edges from
-                        # u: (u, v1) and (u, v2). v1 has two paths and v1 has one
-                        # path crossing it.
+                        # u: (u, v1) and (u, v2). v1 has two paths and v1 has
+                        # one path crossing it.
                         # so, ebc score for (u, v1) = 0.33 and (u, v2) = 0.33 * 2.
 
-                        val = ((1 + prev.get(u, 0)) / paths[u]) * paths[v]
+                        val = (
+                                (
+                                        (1 + prev.get(u, 0)) / paths_count[u]
+                                ) * paths_count[v]
+                        )
                         if u < v:
                             edge_betweenness[(u, v)] += val
                         else:
@@ -133,6 +140,7 @@ class GirvanNewman(object):
         centrality values that are to be removed.
 
         Time Complexity = O(V + E)
+
         """
         visited = dict.fromkeys(self.g.nodes, False)
 
@@ -142,7 +150,7 @@ class GirvanNewman(object):
 
         def dfs(comp, vertex):
             """
-            DFS (Depth-First Traversal) of the graph.
+            DFS (Depth-First Search) of the graph.
             :param comp: current connected component.
             :param vertex: current vertex.
 
