@@ -1,5 +1,9 @@
 # Community Detection
 
+## Summary
+
+I implemented the Girvan-Newman algorithm in Python from scratch as part of my Algorithms project.
+
 ## Usage
 
 `> python detect_communities.py karate_club`
